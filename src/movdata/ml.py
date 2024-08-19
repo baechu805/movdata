@@ -7,7 +7,7 @@ from tqdm import tqdm
 API_KEY = os.getenv('MOVIE_API_KEY')
 
 def save_json(data, file_path):
-    # 파일저장 경로 MKDIR
+    # 파일저장 경로 생성
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
     with open(file_path, 'w', encoding='utf-8') as f:
@@ -20,20 +20,20 @@ def req(url):
 
 def save_movies(year, per_page=10, sleep_time=1):
     file_path = f'../../data/movies/year={year}/data.json'
-    
+
     # 위 경로가 있으면 API 호출을 멈추고 프로그램 종료
     if os.path.exists(file_path):
         print(f"데이터가 이미 존재합니다: {file_path}")
         return True
 
-    # totCnt 갖여오고 total_pages 계산
+    # 총 영화 수를 가져와서 total_pages 계산
     url_base = f"https://kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key={API_KEY}&openStartDt={year}&openEndDt={year}"
-    
+
     r = req(url_base + "&curPage=1")
     tot_cnt = r['movieListResult']['totCnt']
     total_pages = (tot_cnt // per_page) + 1
 
-    # total_pages 만큼 Loop 돌면서 API 호출
+    # total_pages 만큼 루프를 돌면서 API 호출
     all_data = []
     for page in tqdm(range(1, total_pages + 1)):
         time.sleep(sleep_time)
@@ -44,7 +44,7 @@ def save_movies(year, per_page=10, sleep_time=1):
     save_json(all_data, file_path)
     return True
 
-
+# 2015년부터 2021년까지 영화 데이터 저장
 for date in range(2015, 2022):
     save_movies(year=date, sleep_time=0.1)
 
