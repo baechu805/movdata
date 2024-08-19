@@ -32,7 +32,7 @@ with DAG(
     def get_data(dt):
         print('*' * 1000)
         print(dt)
-        from src.movdata.get_data import save_movies
+        from movdata.get_data import save_movies
         save_movies(dt)
 
     def parsing_parquet():
@@ -48,21 +48,22 @@ with DAG(
     task_get_data = PythonVirtualenvOperator(
         task_id='get.data',
         python_callable=get_data,
-        requirements=["git+https://github.com/baechu805/movdata.git@0.2/movieList"],
-        system_site_packages=False,
+        requirements=["git+https://github.com/baechu805/movdata.git@air"],
+	op_args=["{{ ds[:4] }}"],
+	system_site_packages=True
     )
 
     task_parsing_parquet = PythonVirtualenvOperator(
         task_id='parsing.parquet',
         python_callable=parsing_parquet,
-        requirements=[""],
-        system_site_packages=False,
+#requirements=[""],
+	system_site_packages=False,
     )
 
     task_select_parquet = PythonVirtualenvOperator(
         task_id='select.parquet',
         python_callable=select_parquet,
-        requirements=[""],
+#requirements=[""],
         system_site_packages=False,
     )
 
