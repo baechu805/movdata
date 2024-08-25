@@ -39,11 +39,11 @@ def save_movies_Info(year, sleep_time=1):
 
     if os.path.exists(file_path):
         print(f"데이터가 이미 존재합니다: {file_path}")
-        print("영화정보 불러오기를 종료합니다.")
+        print("영화 상세정보 불러오기를 종료합니다.")
         return True
 
     url_base = f"https://kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key={API_KEY}&movieCd="
-    print(f"{year}년 영화정보를 불러옵니다.")
+    print(f"{year}년 영화 상세정보를 불러옵니다.")
     all_data = []
 
     for i in tqdm(movieCd):
@@ -57,7 +57,7 @@ def save_movies_Info(year, sleep_time=1):
             print(f"Error: 'movieInfoResult' not found for movieCd {i}. Skipping this entry.")
 
     save_json(all_data, file_path)
-    print("영화정보 불러오기를 종료합니다.")
+    print("영화상세정보 불러오기를 종료합니다.")
     return True
 
 for date in range(2015, 2022):
